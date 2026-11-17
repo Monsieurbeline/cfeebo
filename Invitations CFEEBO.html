@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0c234b">
+<title>Invitations – CFEEBO</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Great+Vibes&display=swap">
+<style>
+:root{
+  --navy:#071633;
+  --navy2:#0c234b;
+  --gold:#d9ad5c;
+  --gold2:#f3d072;
+  --bg:#f0f4f9;
+  --ink:#0d1829;
+  --mut:#5a6880;
+  --line:#d2dceb;
+  --red:#b3261e;
+  --ok:#1b7a3d;
+  --card:#ffffff;
+  --btxt:#071633;
+}
+body.dark{
+  --bg:#080d16;
+  --ink:#e6ecf5;
+  --mut:#94a3b8;
+  --line:#1f2d44;
+  --card:#111927;
+  --btxt:#f3d072;
+}
+body.dark input, body.dark select, body.dark textarea{border-color:#2a3d5e;}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid #bec9da;border-radius:10px;background:var(--card);font-size:.95rem}
+textarea{min-height:105px;resize:vertical}
+:focus-visible{outline:3px solid var(--gold2);outline-offset:1px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer;background:var(--navy);color:#fff;font-size:.9rem;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.btn:active{transform:scale(.98)}
+.btn.gold{background:linear-gradient(135deg,#e5bc68,#c69437);color:#071633;font-weight:700}
+.btn.alt{background:var(--card);color:var(--btxt);border:1px solid var(--line)}
+.btn.del{background:var(--card);color:var(--red);border:1px solid #f0c6c3}
+.btn.sm{padding:6px 10px;font-size:.8rem;border-radius:8px}
+label{display:grid;gap:4px;font-size:.82rem;font-weight:600}
+
+/* Connexion */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(155deg,#050e21 0%,#071633 55%,#153670 100%)}
+.lbox{background:#fff;color:#0d1829;width:100%;max-width:400px;border-radius:20px;padding:28px 24px;display:grid;gap:14px;box-shadow:0 16px 48px rgba(0,0,0,.35);border-top:5px solid var(--gold)}
+.lbadge{width:68px;height:68px;margin:0 auto;border-radius:50%;background:var(--navy);color:var(--gold2);display:grid;place-items:center;font-weight:800;font-size:1.1rem;border:3px solid var(--gold);box-shadow:0 4px 12px rgba(7,22,51,.25)}
+.lbox h1{font-size:1.05rem;line-height:1.3;text-align:center;color:var(--mut);font-weight:500}
+.lbox h1 b{color:var(--navy);font-weight:800;display:block;font-size:1.45rem;margin-top:2px}
+.err{color:var(--red);font-size:.85rem;min-height:1.1em;text-align:center}
+
+/* Header & App */
+header{background:linear-gradient(90deg,#050e21,#071633 60%,#0c234b);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10;border-bottom:2px solid var(--gold)}
+.hl{display:flex;align-items:center;gap:10px;min-width:0}
+.hcrest{width:42px;height:42px;border-radius:50%;background:#0c234b;border:2px solid var(--gold);color:var(--gold2);display:grid;place-items:center;font-weight:800;font-size:.75rem;flex:none}
+header h1{font-size:.85rem;line-height:1.2;font-weight:500;color:#dbe6f8}
+header h1 b{font-weight:800;display:block;font-size:1.1rem;color:#fff;letter-spacing:.03em}
+.hr{display:flex;gap:8px;align-items:center}
+.iconbtn{padding:8px 11px;font-size:1.05rem}
+
+main{max-width:960px;margin:0 auto;padding:16px 12px 96px}
+.tools{display:grid;gap:10px;grid-template-columns:1fr;margin-bottom:12px}
+@media(min-width:600px){.tools{grid-template-columns:2fr 1fr}}
+.stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;font-size:.82rem;color:var(--mut)}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;cursor:pointer;font-weight:600;transition:all .15s}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+body.dark .chip.on{background:var(--gold);color:#071633;border-color:var(--gold)}
+
+/* Liste des invités */
+.list{display:grid;gap:10px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:42px 1fr;gap:10px 12px;align-items:center;transition:border-color .15s}
+.item:hover{border-color:var(--gold)}
+.item.sent{border-left:4px solid var(--ok)}
+.num{width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--navy) 10%,var(--card));color:var(--btxt);font-weight:700;font-size:.9rem;display:grid;place-items:center;border:1px solid var(--line)}
+.nm{font-weight:700;font-size:1rem;line-height:1.25}
+.nm small{display:block;font-weight:400;color:var(--mut);font-size:.8rem;margin-top:2px}
+.st-tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.7rem;font-weight:600;margin-left:6px;vertical-align:middle}
+.st-tag.ok{background:#dcfce7;color:#166534}
+.st-tag.todo{background:#fef3c7;color:#92400e}
+.acts{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+@media(min-width:640px){
+  .item{grid-template-columns:42px 1fr auto}
+  .acts{grid-column:auto}
+}
+.empty{text-align:center;color:var(--mut);padding:36px 12px;background:var(--card);border-radius:14px;border:1px dashed var(--line)}
+.fab{position:fixed;right:18px;bottom:18px;z-index:8;box-shadow:0 8px 24px rgba(7,22,51,.35);padding:14px 20px;border-radius:99px;font-size:.95rem}
+
+/* Modales */
+.modal{position:fixed;inset:0;background:rgba(5,14,33,.75);z-index:20;display:flex;align-items:flex-end;justify-content:center;overflow:auto;padding:0}
+@media(min-width:600px){.modal{align-items:center;padding:16px}}
+.sheet{background:var(--card);width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:18px;display:grid;gap:14px;max-height:96vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+@media(min-width:600px){.sheet{border-radius:20px}}
+.sheet h2{font-size:1.15rem;color:var(--btxt);display:flex;align-items:center;justify-content:space-between}
+.sec{display:grid;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.sec h3{font-size:.88rem;color:var(--btxt)}
+.grid2{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.bar{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:4px}
+.msgok{font-size:.8rem;color:var(--mut);line-height:1.4}
+
+/* ============================================================
+   CARTE D'INVITATION CFEEBO - DIMENSIONS ORIGINALES (680 x 976 px)
+   Ratio portrait exact de l'affiche 1000517593.png
+   ============================================================ */
+.card-stage{width:100%;max-width:320px;margin:0 auto;border-radius:10px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.28);background:#fff}
+.invite-card{
+  container-type:inline-size;
+  position:relative;
+  width:100%;
+  aspect-ratio:680/976;
+  overflow:hidden;
+  background:#ffffff;
+  user-select:none;
+}
+.invite-card img.bg-poster{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  display:block;
+}
+/* Zone blanche vide exacte entre "Spéciale à" (~34.5%) et "Le Secrétariat..." (~43.5%) */
+.guest-slot{
+  position:absolute;
+  left:5%;
+  width:90%;
+  top:38.8%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  line-height:1.15;
+  padding:0 1.2cqw;
+  word-break:break-word;
+  overflow-wrap:break-word;
+  text-shadow:0 0 12px rgba(255,255,255,.98), 0 1px 3px rgba(255,255,255,.9);
+}
+
+/* Panneau de réglage fin dans la modale d'aperçu */
+.tune-box{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:8px}
+.tune-row{display:grid;grid-template-columns:110px 1fr 44px;gap:8px;align-items:center;font-size:.78rem;font-weight:600}
+.tune-row input[type=range]{padding:0;border:0;background:transparent}
+.tune-row span{text-align:right;color:var(--mut);font-variant-numeric:tabular-nums}
+
+/* Message Toast non bloquant */
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#071633;color:#fff;border:1px solid var(--gold);padding:10px 18px;border-radius:99px;font-size:.88rem;font-weight:600;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.3);transition:opacity .2s}
+
+/* Impression */
+#printarea{display:none}
+@media print{
+  body>*:not(#printarea){display:none!important}
+  #printarea{display:block!important;color:#000;background:#fff}
+  #printarea table{width:100%;border-collapse:collapse;font-size:10.5pt}
+  #printarea th,#printarea td{border:1px solid #888;padding:6px 8px;text-align:left}
+  #printarea th{background:#071633;color:#fff}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" hidden></div>
+
+<!-- ============ ÉCRAN DE CONNEXION ============ -->
+<section id="login">
+  <form class="lbox" id="lform">
+    <div class="lbadge">CFEEBO</div>
+    <h1>Centre de Formation de l’Église Évangélique Baptiste des Orangers<b>Invitations Spéciales</b></h1>
+    <label>Utilisateur<input id="lu" value="admin" autocomplete="username" required></label>
+    <label>Mot de passe<input id="lp" type="password" value="cfeebo2026" autocomplete="current-password" required></label>
+    <div class="err" id="lerr"></div>
+    <button class="btn gold" type="submit">Se connecter</button>
+    <button class="btn alt sm" type="button" id="quicklogin">Accès rapide / Démo</button>
+  </form>
+</section>
+
+<!-- ============ APPLICATION PRINCIPALE ============ -->
+<div id="app" hidden>
+  <header>
+    <div class="hl">
+      <div class="hcrest">CFEEBO</div>
+      <h1>Centre de Formation Évangélique Baptiste<b>Cartes d’Invitation (45)</b></h1>
+    </div>
+    <div class="hr">
+      <button class="btn gold sm" id="btnzipquick" title="Télécharger toutes les cartes en ZIP">📦 Tout en ZIP</button>
+      <button class="btn alt iconbtn" id="gear" aria-label="Réglages, Import & Export" title="Réglages & Exports">⚙️</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Rechercher un invité (ex: Pasteur, Pierre, Promotion…)" aria-label="Rechercher un invité">
+      <select id="fstat" aria-label="Filtrer par statut">
+        <option value="all">Tous les invités</option>
+        <option value="todo">À envoyer</option>
+        <option value="sent">Déjà envoyées</option>
+      </select>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="list" id="list"></div>
+  </main>
+
+  <button class="btn gold fab" id="add">+ Ajouter un invité</button>
+</div>
+
+<!-- ============ MODALE AJOUT / MODIFICATION ============ -->
+<div class="modal" id="mform" hidden>
+  <form class="sheet" id="pform">
+    <h2 id="ftitle">Ajouter un invité</h2>
+    <div class="card-stage" style="max-width:210px" id="fpreview"></div>
+    <label>Nom complet ou titre de l’invité(e) *
+      <input id="fname" placeholder="Ex: Pasteur Medy Sanon" required>
+    </label>
+    <div class="grid2">
+      <label>Note / Catégorie (optionnel)
+        <input id="fnote" placeholder="Ex: Invité d'honneur, Promotion...">
+      </label>
+      <label>Téléphone WhatsApp (optionnel)
+        <input id="ftel" type="tel" placeholder="+509...">
+      </label>
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" id="fsent" style="width:18px;height:18px"> Invitation déjà remise / envoyée
+    </label>
+    <div class="bar">
+      <button type="button" class="btn alt" data-close>Annuler</button>
+      <button type="submit" class="btn gold">Enregistrer</button>
+    </div>
+  </form>
+</div>
+
+<!-- ============ MODALE APERÇU & EXPORT CARTE ============ -->
+<div class="modal" id="mview" hidden>
+  <div class="sheet">
+    <h2>
+      <span id="vtitle">Carte d’invitation</span>
+      <span style="display:flex;gap:6px">
+        <button type="button" class="btn alt sm" id="vprev" title="Invité précédent">‹ Préc.</button>
+        <button type="button" class="btn alt sm" id="vnext" title="Invité suivant">Suiv. ›</button>
+      </span>
+    </h2>
+
+    <div class="card-stage" id="cardbox"></div>
+
+    <!-- Réglages fins de position et typographie -->
+    <details class="tune-box">
+      <summary style="font-size:.82rem;font-weight:700;cursor:pointer;color:var(--btxt)">🎯 Ajuster le placement & le style du nom</summary>
+      <div class="tune-row">
+        <span>Position Y</span>
+        <input type="range" id="ty" min="33" max="44" step="0.2">
+        <span id="tyv">38.8%</span>
+      </div>
+      <div class="tune-row">
+        <span>Taille texte</span>
+        <input type="range" id="tsz" min="3.0" max="6.5" step="0.1">
+        <span id="tszv">4.8</span>
+      </div>
+      <div class="grid2" style="margin-top:2px">
+        <label>Police
+          <select id="tfont">
+            <option value="'Playfair Display', Georgia, serif">Classique (Playfair Serif)</option>
+            <option value="'Poppins', sans-serif">Moderne (Poppins Gras)</option>
+            <option value="'Great Vibes', cursive">Calligraphie (Great Vibes)</option>
+          </select>
+        </label>
+        <label>Couleur du nom
+          <select id="tcol">
+            <option value="#071633">Bleu Marine CFEEBO</option>
+            <option value="#9a6b16">Or Foncé Prestige</option>
+            <option value="#1a1a1a">Noir Élégant</option>
+          </select>
+        </label>
+      </div>
+    </details>
+
+    <div class="bar">
+      <button type="button" class="btn alt" data-close>Fermer</button>
+      <button type="button" class="btn gold" id="dl">⬇️ Télécharger PNG (Format Original)</button>
+      <button type="button" class="btn alt" id="shr">Partager</button>
+      <button type="button" class="btn alt" id="wa" hidden>WhatsApp</button>
+      <button type="button" class="btn alt" id="prc">Imprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODALE RÉGLAGES, IMPORT & EXPORT ============ -->
+<div class="modal" id="mset" hidden>
+  <div class="sheet">
+    <h2>⚙️ Réglages, Import &amp; Exports</h2>
+
+    <div class="sec">
+      <h3>1. Génération en lot (ZIP)</h3>
+      <button type="button" class="btn gold" id="xzip">📦 Générer toutes les cartes affichées (ZIP de PNG)</button>
+      <div class="msgok" id="zipmsg">Télécharge un fichier ZIP contenant chaque carte personnalisée au format original exact (680 × 976 px).</div>
+    </div>
+
+    <div class="sec">
+      <h3>2. Image de fond de la carte</h3>
+      <div class="msgok" id="bgstatus">Image active : <b>1000517593.png (Affiche originale CFEEBO)</b></div>
+      <div class="grid2">
+        <label class="btn alt" style="cursor:pointer">🖼️ Charger une autre image
+          <input type="file" id="bgfile" accept="image/*" hidden>
+        </label>
+        <button type="button" class="btn alt" id="bgreset">Rétablir l’image par défaut</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h3>3. Ajout rapide en masse (Coller une liste)</h3>
+      <textarea id="bulktxt" placeholder="Collez ici une liste de noms (un par ligne). Les numéros au début sont ignorés."></textarea>
+      <button type="button" class="btn" id="bulkadd">Ajouter ces noms à la liste</button>
+    </div>
+
+    <div class="sec">
+      <h3>4. Importer CSV / Excel</h3>
+      <input type="file" id="fimp" accept=".csv,.xlsx,.xls">
+      <div class="msgok" id="impmsg">Colonnes reconnues : Nom, Prénom, Téléphone, Note.</div>
+    </div>
+
+    <div class="sec">
+      <h3>5. Exporter la liste d’invités</h3>
+      <div class="grid2">
+        <button type="button" class="btn alt" id="xcsv">CSV</button>
+        <button type="button" class="btn alt" id="xxls">Excel (.xlsx)</button>
+        <button type="button" class="btn alt" id="xpdf">PDF (Émargement)</button>
+        <button type="button" class="btn alt" id="xprt">Imprimer la liste</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h3>6. Sauvegarde &amp; Apparence</h3>
+      <div class="grid2">
+        <button type="button" class="btn alt" id="bsave">Sauvegarder (JSON)</button>
+        <label class="btn alt" style="cursor:pointer">Restaurer (JSON)
+          <input type="file" id="brest" accept=".json" hidden>
+        </label>
+      </div>
+      <div class="grid2">
+        <label>Thème de l’interface
+          <select id="sdark">
+            <option value="0">Clair</option>
+            <option value="1">Sombre</option>
+          </select>
+        </label>
+        <label>Réinitialiser la liste
+          <button type="button" class="btn del" id="reset45">Restaurer les 45 invités</button>
+        </label>
+      </div>
+    </div>
+
+    <div class="bar">
+      <button type="button" class="btn del" id="logout">Se déconnecter</button>
+      <button type="button" class="btn" data-close>Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div id="printarea"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+/* ============================================================
+   CONFIGURATION CFEEBO & LISTE INITIALE (45 INVITÉS)
+   ============================================================ */
+const CONFIG = {
+  id: 'cfeebo_exact_2026',
+  nom: "Centre de Formation de l'Église Évangélique Baptiste des Orangers (CFEEBO)",
+  utilisateur: 'admin',
+  motdepasse: 'cfeebo2026',
+  defaultPoster: '1000517593.png'
+};
+
+const K = n => CONFIG.id + '_' + n;
+const $ = id => document.getElementById(id);
+
+const INITIAL_GUESTS_RAW = [
+  "Pierre Jean Levy",
+  "Emmanuel Michel",
+  "Louis Poneld",
+  "Esaie Elimene",
+  "Polidor Marie Polna",
+  "Sanon Medy",
+  "Docteur Junior Frere",
+  "Charles Santo",
+  "Dolalona Isabellita",
+  "Justine St-Juste",
+  "Debiliane Demetrius",
+  "Promotion CFEEBO 2021 - 2022- 2023- 2024 - 2025",
+  "Nicole Dume",
+  "Valery Jean Pierre",
+  "Jean Pierre Silvana",
+  "Jean Robert Avril",
+  "Antoine Laurent",
+  "Frere Matisl",
+  "Pasteur Medy Sanon",
+  "Pasteur Abraham Comper",
+  "Ligue des Pasteurs du Sud'Est",
+  "Bellevue Normil",
+  "Jarbath Patrick",
+  "Nadia Justafor",
+  "Charitable Naidine",
+  "Mme Dorothee Alouidor",
+  "Mr Gedeon Fritzner",
+  "Billy Sylvain",
+  "Jean Louis Gladys",
+  "Edith E Wilcino",
+  "Edith Robin J Wilcino",
+  "Pasteur Donat Frantz",
+  "Christa Pierre Louis",
+  "Prudent Carolin",
+  "Jean Pierre Rosita",
+  "Bienfaisant Jean Ernest",
+  "Ketline Remarque",
+  "Sr Manouche",
+  "Sr Emanuela",
+  "Fr Carlo Dieudonne",
+  "Sr Michelove",
+  "Pasteur Aly Hector",
+  "Pasteur Dieupie Cherubin",
+  "Madame Erlande Egalite",
+  "Hebert Lahatte"
+];
+
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.hidden = true, 2800);
+}
+
+const cleanGuestName = str => String(str || '').replace(/^\s*\d+\s*[\.\-\)\:]\s*/, '').trim();
+const nrm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const makeInitialGuests = () => INITIAL_GUESTS_RAW.map((name, idx) => ({
+  id: 1000 + idx,
+  name: cleanGuestName(name),
+  note: name.toLowerCase().includes('promotion') ? 'Promotion CFEEBO' : '',
+  tel: '',
+  sent: false
+}));
+
+let guests = [];
+try {
+  const raw = localStorage.getItem(K('guests'));
+  guests = raw ? JSON.parse(raw) : makeInitialGuests();
+  if (!raw) localStorage.setItem(K('guests'), JSON.stringify(guests));
+} catch (e) {
+  guests = makeInitialGuests();
+}
+
+const saveGuests = () => {
+  try { localStorage.setItem(K('guests'), JSON.stringify(guests)); }
+  catch (e) { toast('Stockage plein.'); }
+};
+
+/* Style et positionnement du nom */
+const DEFAULT_STYLE = {
+  y: 38.8,
+  size: 4.8,
+  font: "'Playfair Display', Georgia, serif",
+  color: '#071633'
+};
+let cardStyle = {...DEFAULT_STYLE};
+try {
+  const savedStyle = JSON.parse(localStorage.getItem(K('style')) || 'null');
+  if (savedStyle) cardStyle = Object.assign({}, DEFAULT_STYLE, savedStyle);
+} catch (e) {}
+const saveStyle = () => {
+  try { localStorage.setItem(K('style'), JSON.stringify(cardStyle)); } catch (e) {}
+};
+
+let customPoster = '';
+try { customPoster = localStorage.getItem(K('poster')) || ''; } catch (e) {}
+let resolvedDefaultPoster = CONFIG.defaultPoster;
+
+/* Conversion en DataURL pour éviter les problèmes CORS lors des exports canvas */
+fetch(CONFIG.defaultPoster)
+  .then(r => r.ok ? r.blob() : Promise.reject())
+  .then(b => new Promise(ok => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.readAsDataURL(b); }))
+  .then(dataUrl => { resolvedDefaultPoster = dataUrl; if (!customPoster) refreshOpenCards(); })
+  .catch(() => {});
+
+const getPosterSrc = () => customPoster || resolvedDefaultPoster;
+
+/* Authentification */
+const openApp = () => {
+  $('login').hidden = true;
+  $('app').hidden = false;
+  render();
+};
+
+$('lform').onsubmit = e => {
+  e.preventDefault();
+  if ($('lu').value.trim() === CONFIG.utilisateur && $('lp').value === CONFIG.motdepasse) {
+    sessionStorage.setItem(K('auth'), '1');
+    $('lerr').textContent = '';
+    openApp();
+  } else {
+    $('lerr').textContent = 'Utilisateur ou mot de passe incorrect.';
+  }
+};
+
+$('quicklogin').onclick = () => {
+  $('lu').value = CONFIG.utilisateur;
+  $('lp').value = CONFIG.motdepasse;
+  sessionStorage.setItem(K('auth'), '1');
+  openApp();
+};
+
+$('logout').onclick = () => {
+  $('mset').hidden = true;
+  sessionStorage.removeItem(K('auth'));
+  $('app').hidden = true;
+  $('login').hidden = false;
+};
+
+/* Rendu liste */
+let shownGuests = [];
+
+function render() {
+  const q = nrm($('q').value.trim());
+  const st = $('fstat').value;
+
+  shownGuests = guests.filter(g => {
+    const matchText = !q || nrm(`${g.name} ${g.note || ''} ${g.tel || ''}`).includes(q);
+    const matchStat = st === 'all' || (st === 'sent' ? g.sent : !g.sent);
+    return matchText && matchStat;
+  });
+
+  const sentCount = guests.filter(g => g.sent).length;
+  $('stats').innerHTML = `
+    <span class="chip on">${shownGuests.length} / ${guests.length} invité(s)</span>
+    <span class="chip" id="chip-todo">À envoyer : ${guests.length - sentCount}</span>
+    <span class="chip" id="chip-sent">Envoyées : ${sentCount}</span>
+  `;
+
+  $('chip-todo').onclick = () => { $('fstat').value = $('fstat').value === 'todo' ? 'all' : 'todo'; render(); };
+  $('chip-sent').onclick = () => { $('fstat').value = $('fstat').value === 'sent' ? 'all' : 'sent'; render(); };
+
+  $('list').innerHTML = shownGuests.length ? shownGuests.map((g) => {
+    const globalIdx = guests.findIndex(x => x.id === g.id) + 1;
+    const badge = g.sent ? '<span class="st-tag ok">✓ Envoyée</span>' : '<span class="st-tag todo">À envoyer</span>';
+    return `
+      <div class="item${g.sent ? ' sent' : ''}">
+        <div class="num">${globalIdx}</div>
+        <div>
+          <div class="nm">${esc(g.name)}${badge}</div>
+          <small style="color:var(--mut);font-size:.8rem">${g.note ? esc(g.note) : 'Invité(e) CFEEBO'}${g.tel ? ' · ' + esc(g.tel) : ''}</small>
+        </div>
+        <div class="acts">
+          <button type="button" class="btn gold sm" data-v="${g.id}">👁️ Voir carte</button>
+          <button type="button" class="btn alt sm" data-t="${g.id}" title="Marquer comme envoyée / à envoyer">${g.sent ? '↩️' : '✓'}</button>
+          <button type="button" class="btn alt sm" data-e="${g.id}">Modifier</button>
+          <button type="button" class="btn del sm" data-d="${g.id}">✕</button>
+        </div>
+      </div>
+    `;
+  }).join('') : '<div class="empty">Aucun invité ne correspond à votre recherche.</div>';
+}
+
+['q', 'fstat'].forEach(id => $(id).addEventListener('input', render));
+
+$('list').onclick = e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const id = +(btn.dataset.v || btn.dataset.e || btn.dataset.d || btn.dataset.t);
+  const g = guests.find(x => x.id === id);
+  if (!g) return;
+
+  if (btn.dataset.v) openCardView(g);
+  else if (btn.dataset.t) {
+    g.sent = !g.sent;
+    saveGuests();
+    render();
+    toast(g.sent ? `Invitation marquée envoyée pour ${g.name}` : `Marquée à envoyer`);
+  }
+  else if (btn.dataset.e) openForm(g);
+  else if (btn.dataset.d) {
+    guests = guests.filter(x => x.id !== id);
+    saveGuests();
+    render();
+    toast(`Invité supprimé : ${g.name}`);
+  }
+};
+
+/* Génération de la carte HTML (Dimensions exactes 680x976 px) */
+function computeAutoFontSize(name, baseCqw) {
+  const len = (name || '').trim().length;
+  if (len <= 16) return baseCqw;
+  if (len <= 24) return baseCqw * 0.88;
+  if (len <= 34) return baseCqw * 0.74;
+  if (len <= 44) return baseCqw * 0.62;
+  return Math.max(2.5, baseCqw * 0.52);
+}
+
+function buildCardHTML(guestName) {
+  const displayName = (guestName || '').trim() || 'Nom de l’invité(e)';
+  const fontSizeCqw = computeAutoFontSize(displayName, cardStyle.size).toFixed(2);
+  const isItalic = cardStyle.font.includes('Playfair') ? 'italic' : 'normal';
+  const weight = cardStyle.font.includes('Great Vibes') ? '400' : '700';
+
+  return `
+    <div class="invite-card">
+      <img class="bg-poster" src="${getPosterSrc()}" alt="Carte d'invitation CFEEBO">
+      <div class="guest-slot" style="
+        top:${cardStyle.y}%;
+        font-size:${fontSizeCqw}cqw;
+        font-family:${cardStyle.font};
+        font-style:${isItalic};
+        font-weight:${weight};
+        color:${cardStyle.color};
+      ">${esc(displayName)}</div>
+    </div>
+  `;
+}
+
+function refreshOpenCards() {
+  if (!$('mview').hidden && currentViewGuest) {
+    $('cardbox').innerHTML = buildCardHTML(currentViewGuest.name);
+  }
+  if (!$('mform').hidden) {
+    $('fpreview').innerHTML = buildCardHTML($('fname').value);
+  }
+}
+
+/* Ajout / Modification */
+let editingId = null;
+
+function openForm(g = null) {
+  editingId = g ? g.id : null;
+  $('ftitle').textContent = g ? 'Modifier l’invité(e)' : 'Ajouter un invité(e)';
+  $('fname').value = g ? g.name : '';
+  $('fnote').value = g ? (g.note || '') : '';
+  $('ftel').value = g ? (g.tel || '') : '';
+  $('fsent').checked = g ? !!g.sent : false;
+  $('fpreview').innerHTML = buildCardHTML($('fname').value);
+  $('mform').hidden = false;
+  setTimeout(() => $('fname').focus(), 50);
+}
+
+$('add').onclick = () => openForm(null);
+$('fname').oninput = () => {
+  $('fpreview').innerHTML = buildCardHTML($('fname').value);
+};
+
+$('pform').onsubmit = e => {
+  e.preventDefault();
+  const name = cleanGuestName($('fname').value);
+  if (!name) return;
+  const payload = {name, note: $('fnote').value.trim(), tel: $('ftel').value.trim(), sent: $('fsent').checked};
+  if (editingId) {
+    const target = guests.find(x => x.id === editingId);
+    if (target) Object.assign(target, payload);
+    toast('Invité mis à jour.');
+  } else {
+    guests.push({id: Date.now(), ...payload});
+    toast('Invité ajouté.');
+  }
+  saveGuests();
+  $('mform').hidden = true;
+  render();
+};
+
+/* Aperçu et export */
+let currentViewGuest = null;
+
+const fileNameFor = g => {
+  const slug = nrm(g.name).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'invite';
+  return `invitation-CFEEBO-${slug}.png`;
+};
+
+async function renderCardToCanvas(cardEl) {
+  try { await document.fonts.ready; } catch (e) {}
+  const targetWidth = 1360; // 2x 680px (Haute définition originale)
+  const scale = targetWidth / Math.max(1, cardEl.offsetWidth);
+  return html2canvas(cardEl, {scale, useCORS: true, allowTaint: false, backgroundColor: '#ffffff'});
+}
+
+function syncTuneControls() {
+  $('ty').value = cardStyle.y;
+  $('tyv').textContent = cardStyle.y + '%';
+  $('tsz').value = cardStyle.size;
+  $('tszv').textContent = Number(cardStyle.size).toFixed(1);
+  $('tfont').value = cardStyle.font;
+  $('tcol').value = cardStyle.color;
+}
+
+function openCardView(g) {
+  currentViewGuest = g;
+  const idx = shownGuests.findIndex(x => x.id === g.id);
+  $('vtitle').textContent = idx >= 0 ? `Carte ${idx + 1} / ${shownGuests.length}` : 'Carte d’invitation';
+  syncTuneControls();
+  $('cardbox').innerHTML = buildCardHTML(g.name);
+
+  const phone = (g.tel || '').replace(/\D/g, '');
+  $('wa').hidden = !phone;
+  $('wa').onclick = () => {
+    const txt = encodeURIComponent(`Bonjour ${g.name}, voici votre carte d'invitation spéciale pour la cérémonie de Remise des Certificats du CFEEBO le 14 Décembre 2026.`);
+    window.open(`https://wa.me/${phone}?text=${txt}`, '_blank');
+  };
+
+  $('mview').hidden = false;
+}
+
+$('vprev').onclick = () => {
+  if (!currentViewGuest || !shownGuests.length) return;
+  const idx = shownGuests.findIndex(x => x.id === currentViewGuest.id);
+  openCardView(shownGuests[(idx - 1 + shownGuests.length) % shownGuests.length]);
+};
+
+$('vnext').onclick = () => {
+  if (!currentViewGuest || !shownGuests.length) return;
+  const idx = shownGuests.findIndex(x => x.id === currentViewGuest.id);
+  openCardView(shownGuests[(idx + 1) % shownGuests.length]);
+};
+
+['ty', 'tsz', 'tfont', 'tcol'].forEach(id => {
+  $(id).addEventListener('input', () => {
+    cardStyle.y = parseFloat($('ty').value);
+    cardStyle.size = parseFloat($('tsz').value);
+    cardStyle.font = $('tfont').value;
+    cardStyle.color = $('tcol').value;
+    saveStyle();
+    syncTuneControls();
+    if (currentViewGuest) $('cardbox').innerHTML = buildCardHTML(currentViewGuest.name);
+  });
+});
+
+$('dl').onclick = async () => {
+  if (!currentViewGuest) return;
+  const btn = $('dl');
+  btn.disabled = true;
+  btn.textContent = '⏳ Création PNG...';
+  try {
+    const canvas = await renderCardToCanvas($('cardbox').firstElementChild);
+    const a = document.createElement('a');
+    a.download = fileNameFor(currentViewGuest);
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    toast('Carte PNG téléchargée !');
+  } catch (e) {
+    toast('Erreur lors de l\'export PNG.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⬇️ Télécharger PNG (Format Original)';
+  }
+};
+
+$('shr').onclick = async () => {
+  if (!currentViewGuest) return;
+  try {
+    const canvas = await renderCardToCanvas($('cardbox').firstElementChild);
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    const file = new File([blob], fileNameFor(currentViewGuest), {type: 'image/png'});
+    if (navigator.canShare && navigator.canShare({files: [file]})) {
+      await navigator.share({files: [file], title: 'Invitation CFEEBO', text: `Invitation pour ${currentViewGuest.name}`});
+    } else {
+      $('dl').click();
+    }
+  } catch (e) {}
+};
+
+$('prc').onclick = () => {
+  if (!currentViewGuest) return;
+  const pa = $('printarea');
+  pa.innerHTML = '';
+  const clone = $('cardbox').firstElementChild.cloneNode(true);
+  clone.style.width = '12cm';
+  clone.style.margin = '0 auto';
+  pa.appendChild(clone);
+  window.print();
+};
+
+/* Export ZIP & Outils */
+const CDN = 'https://cdnjs.cloudflare.com/ajax/libs/';
+const LIBS = {
+  xlsx: CDN + 'xlsx/0.18.5/xlsx.full.min.js',
+  pdf1: CDN + 'jspdf/2.5.1/jspdf.umd.min.js',
+  pdf2: CDN + 'jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js',
+  zip: CDN + 'jszip/3.10.1/jszip.min.js'
+};
+const loadedLibs = {};
+const loadLib = url => loadedLibs[url] ||= new Promise((ok, ko) => {
+  const s = document.createElement('script');
+  s.src = url;
+  s.onload = ok;
+  s.onerror = () => { delete loadedLibs[url]; ko(new Error('Connexion internet requise.')); };
+  document.head.appendChild(s);
+});
+
+const dlBlob = (blob, filename) => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+};
+
+async function generateAllZip() {
+  if (!shownGuests.length) { toast('Aucun invité.'); return; }
+  $('mset').hidden = false;
+  const msgEl = $('zipmsg');
+  const btn1 = $('xzip');
+  const btn2 = $('btnzipquick');
+  btn1.disabled = true; btn2.disabled = true;
+
+  try {
+    msgEl.textContent = 'Chargement du module ZIP...';
+    await loadLib(LIBS.zip);
+    const zip = new JSZip();
+    const staging = document.createElement('div');
+    staging.style.cssText = 'position:fixed;left:-9999px;top:0;width:680px;z-index:-1';
+    document.body.appendChild(staging);
+
+    try {
+      const usedNames = new Set();
+      for (let i = 0; i < shownGuests.length; i++) {
+        const g = shownGuests[i];
+        msgEl.textContent = `Génération ${i + 1} / ${shownGuests.length} : ${g.name}...`;
+        staging.innerHTML = buildCardHTML(g.name);
+        const canvas = await renderCardToCanvas(staging.firstElementChild);
+        let fname = fileNameFor(g);
+        if (usedNames.has(fname)) fname = fname.replace('.png', `-${i + 1}.png`);
+        usedNames.add(fname);
+        zip.file(fname, canvas.toDataURL('image/png').split(',')[1], {base64: true});
+      }
+      msgEl.textContent = 'Compression ZIP...';
+      const content = await zip.generateAsync({type: 'blob'});
+      dlBlob(content, `Invitations-CFEEBO-Original-${new Date().toISOString().slice(0, 10)}.zip`);
+      msgEl.textContent = `✅ Terminé ! ${shownGuests.length} cartes exportées.`;
+      toast('Archive ZIP téléchargée !');
+    } finally {
+      staging.remove();
+    }
+  } catch (err) {
+    msgEl.textContent = '❌ ' + (err.message || 'Erreur ZIP.');
+  } finally {
+    btn1.disabled = false; btn2.disabled = false;
+  }
+}
+
+$('xzip').onclick = generateAllZip;
+$('btnzipquick').onclick = generateAllZip;
+
+/* Image de fond personnalisée */
+function updateBgStatus() {
+  $('bgstatus').innerHTML = customPoster
+    ? 'Image active : <b>Image personnalisée</b>'
+    : 'Image active : <b>1000517593.png (Affiche originale)</b>';
+}
+
+$('bgfile').onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 1600 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * k);
+      c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      customPoster = c.toDataURL('image/jpeg', 0.92);
+      try {
+        localStorage.setItem(K('poster'), customPoster);
+        updateBgStatus();
+        refreshOpenCards();
+        toast('Image de fond mise à jour.');
+      } catch (err) {
+        toast('Image trop lourde.');
+      }
+    };
+    img.src = fr.result;
+  };
+  fr.readAsDataURL(file);
+  e.target.value = '';
+};
+
+$('bgreset').onclick = () => {
+  customPoster = '';
+  try { localStorage.removeItem(K('poster')); } catch (e) {}
+  updateBgStatus();
+  refreshOpenCards();
+  toast('Image originale rétablie.');
+};
+
+/* Ajout rapide en masse */
+$('bulkadd').onclick = () => {
+  const raw = $('bulktxt').value.trim();
+  if (!raw) return;
+  const existingKeys = new Set(guests.map(g => nrm(g.name)));
+  let added = 0, skipped = 0;
+
+  raw.split(/\r?\n/).forEach((line, idx) => {
+    const cleaned = cleanGuestName(line);
+    if (!cleaned) return;
+    const key = nrm(cleaned);
+    if (existingKeys.has(key)) { skipped++; return; }
+    existingKeys.add(key);
+    guests.push({id: Date.now() + idx, name: cleaned, note: '', tel: '', sent: false});
+    added++;
+  });
+
+  if (added > 0) { saveGuests(); render(); }
+  $('bulktxt').value = '';
+  toast(`${added} ajouté(s), ${skipped} doublon(s) ignoré(s).`);
+};
+
+/* Import CSV / Excel */
+$('fimp').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    await loadLib(LIBS.xlsx);
+    const isCsv = /\.csv$/i.test(file.name);
+    let wb;
+    if (isCsv) {
+      const txt = await file.text();
+      const firstLine = txt.split(/\r?\n/)[0] || '';
+      wb = XLSX.read(txt, {type: 'string', FS: (firstLine.match(/;/g) || []).length > (firstLine.match(/,/g) || []).length ? ';' : ','});
+    } else {
+      wb = XLSX.read(await file.arrayBuffer(), {type: 'array'});
+    }
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval: ''});
+    const existingKeys = new Set(guests.map(g => nrm(g.name)));
+    let added = 0, skipped = 0;
+
+    rows.forEach((r, idx) => {
+      const normRow = {};
+      for (const k in r) normRow[nrm(k).replace(/[^a-z]/g, '')] = String(r[k]).trim();
+      const fullName = cleanGuestName(
+        normRow.nomcomplet || normRow.invite || (normRow.prenom && normRow.nom ? `${normRow.prenom} ${normRow.nom}` : (normRow.nom || normRow.prenom || Object.values(r)[0]))
+      );
+      if (!fullName) return;
+      const key = nrm(fullName);
+      if (existingKeys.has(key)) { skipped++; return; }
+      existingKeys.add(key);
+      guests.push({id: Date.now() + idx, name: fullName, note: normRow.note || '', tel: normRow.telephone || normRow.tel || '', sent: false});
+      added++;
+    });
+
+    saveGuests();
+    render();
+    $('impmsg').textContent = `✅ ${added} ajouté(s), ${skipped} doublon(s) ignoré(s).`;
+    toast(`${added} invités importés.`);
+  } catch (err) {
+    $('impmsg').textContent = '❌ ' + (err.message || 'Erreur import.');
+  }
+  e.target.value = '';
+};
+
+/* Exports liste */
+const stamp = () => new Date().toISOString().slice(0, 10);
+const HEAD = ['N°', 'Nom de l’invité(e)', 'Note / Catégorie', 'Téléphone', 'Statut'];
+const rowsForExport = () => shownGuests.map((g, i) => [i + 1, g.name, g.note || '', g.tel || '', g.sent ? 'Envoyée' : 'À envoyer']);
+
+$('xcsv').onclick = () => {
+  const escCsv = v => /[;"\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+  const csv = '\ufeff' + [HEAD, ...rowsForExport()].map(r => r.map(escCsv).join(';')).join('\r\n');
+  dlBlob(new Blob([csv], {type: 'text/csv;charset=utf-8'}), `invites-CFEEBO-${stamp()}.csv`);
+};
+
+$('xxls').onclick = async () => {
+  try {
+    await loadLib(LIBS.xlsx);
+    const ws = XLSX.utils.aoa_to_sheet([HEAD, ...rowsForExport()]);
+    ws['!cols'] = [{wch: 6}, {wch: 42}, {wch: 24}, {wch: 18}, {wch: 14}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Invités CFEEBO');
+    XLSX.writeFile(wb, `invites-CFEEBO-${stamp()}.xlsx`);
+  } catch (e) { toast(e.message); }
+};
+
+$('xpdf').onclick = async () => {
+  try {
+    await loadLib(LIBS.pdf1);
+    await loadLib(LIBS.pdf2);
+    const doc = new window.jspdf.jsPDF();
+    doc.setFontSize(13);
+    doc.setTextColor(7, 22, 51);
+    doc.text('CFEEBO – Liste des Invités (Remise des Certificats)', 14, 15);
+    doc.autoTable({head: [HEAD], body: rowsForExport(), startY: 22, headStyles: {fillColor: [7, 22, 51]}, styles: {fontSize: 9}});
+    doc.save(`liste-emargement-CFEEBO-${stamp()}.pdf`);
+  } catch (e) { toast(e.message); }
+};
+
+$('xprt').onclick = () => {
+  const pa = $('printarea');
+  pa.innerHTML = `
+    <h2 style="margin-bottom:10px;color:#071633">CFEEBO – Liste des Invités (${shownGuests.length})</h2>
+    <table>
+      <thead><tr>${HEAD.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+      <tbody>${rowsForExport().map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table>
+  `;
+  window.print();
+};
+
+$('bsave').onclick = () => {
+  const backup = {version: 1, app: 'CFEEBO', guests, cardStyle, customPoster};
+  dlBlob(new Blob([JSON.stringify(backup)], {type: 'application/json'}), `sauvegarde-CFEEBO-${stamp()}.json`);
+  toast('Sauvegarde JSON téléchargée.');
+};
+
+$('brest').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const j = JSON.parse(await file.text());
+    if (!Array.isArray(j.guests)) throw new Error();
+    guests = j.guests;
+    saveGuests();
+    if (j.cardStyle) { cardStyle = Object.assign({}, DEFAULT_STYLE, j.cardStyle); saveStyle(); }
+    if (typeof j.customPoster === 'string') {
+      customPoster = j.customPoster;
+      if (customPoster) localStorage.setItem(K('poster'), customPoster);
+      else localStorage.removeItem(K('poster'));
+      updateBgStatus();
+    }
+    render();
+    toast(`Restauration réussie (${guests.length} invités).`);
+  } catch (err) {
+    toast('Fichier invalide.');
+  }
+  e.target.value = '';
+};
+
+$('reset45').onclick = () => {
+  guests = makeInitialGuests();
+  saveGuests();
+  render();
+  toast('45 invités d\'origine rétablis.');
+};
+
+const setDark = v => {
+  document.body.classList.toggle('dark', v);
+  try { localStorage.setItem(K('dark'), v ? '1' : '0'); } catch (e) {}
+};
+try { setDark(localStorage.getItem(K('dark')) === '1'); } catch (e) {}
+$('sdark').onchange = () => setDark($('sdark').value === '1');
+
+$('gear').onclick = () => {
+  updateBgStatus();
+  $('sdark').value = document.body.classList.contains('dark') ? '1' : '0';
+  $('mset').hidden = false;
+};
+
+document.querySelectorAll('[data-close]').forEach(btn => {
+  btn.onclick = () => btn.closest('.modal').hidden = true;
+});
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('mousedown', e => { if (e.target === m) m.hidden = true; });
+});
+
+if (sessionStorage.getItem(K('auth'))) openApp();
+</script>
+</body>
+</html>
